@@ -16,28 +16,26 @@ public class HsqldbUserDao implements UserDao {
 
 	private static final String SELECT_ALL_QUERY = "SELECT id, firstname, lastname, dateofbirth FROM users";
 	private static final String INSERT_QUERY = "INSERT INTO users (firstname, lastname, dateofbirth) VALUES (?, ?, ?)";
+	final private String UPDATE_QUERY = "UPDATE users SET firstname = ?, lastname = ?, dateofbirth = ? WHERE id = ?";
+	final private String SELECT_QUERY = "SELECT * FROM users WHERE id = ?";
+	final private String DELETE_QUERY = "DELETE FROM users WHERE id = ?";
 	private ConnectionFactory connectionFactory;
 
-	public HsqldbUserDao(){
-		
+	public HsqldbUserDao() {
+
 	}
-	
+
 	public HsqldbUserDao(ConnectionFactory connectionFactory) {
 		this.connectionFactory = connectionFactory;
 	}
-	
-
 
 	public ConnectionFactory getConnectionFactory() {
 		return connectionFactory;
 	}
 
-
-
-
 	public User create(User user) throws DatabaseException {
 		try {
-			Connection connection = connectionFactory.createConneciton();
+			Connection connection = connectionFactory.createConnection();
 			PreparedStatement statement = connection.prepareStatement(INSERT_QUERY);
 			statement.setString(1, user.getFirstName());
 			statement.setString(2, user.getLastName());
@@ -64,26 +62,70 @@ public class HsqldbUserDao implements UserDao {
 
 	}
 
+	@Override
 	public void update(User user) throws DatabaseException {
-		// TODO Auto-generated method stub
-
+		try {
+			Connection connection = this.connectionFactory.createConnection();
+			PreparedStatement statement = connection.prepareStatement(this.UPDATE_QUERY);
+			statement.setString(1, user.getFirstName());
+			statement.setString(2, user.getLastName());
+			statement.setDate(3, new Date(user.getDateOfBirth().getTime()));
+			statement.setLong(4, new Long(user.getId()));
+			int n = statement.executeUpdate();
+			if (n != 1) {
+				throw new DatabaseException("Number of updated rows: " + n);
+			}
+		} catch (DatabaseException de) {
+			throw de;
+		} catch (SQLException sqle) {
+			throw new DatabaseException(sqle);
+		}
 	}
 
+	@Override
 	public void delete(User user) throws DatabaseException {
-		// TODO Auto-generated method stub
-
+		try {
+			Connection connection = this.connectionFactory.createConnection();
+			PreparedStatement statement = connection.prepareStatement(this.DELETE_QUERY);
+			statement.setLong(1, new Long(user.getId()));
+			int n = statement.executeUpdate();
+			if (n != 1) {
+				throw new DatabaseException("Number of deleted rows: " + n);
+			}
+		} catch (DatabaseException de) {
+			throw de;
+		} catch (SQLException sqle) {
+			throw new DatabaseException(sqle);
+		}
 	}
 
+	@Override
 	public User find(Long id) throws DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
+		User user = new User();
+		try {
+			Connection connection = this.connectionFactory.createConnection();
+			PreparedStatement statement = connection.prepareStatement(this.SELECT_QUERY);
+			statement.setLong(1, new Long(id));
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				user.setId(new Long(resultSet.getLong(1)));
+				user.setFirstName(resultSet.getString(2));
+				user.setLastName(resultSet.getString(3));
+				user.setDateOfBirth(resultSet.getDate(4));
+			}
+		} catch (DatabaseException de) {
+			throw de;
+		} catch (SQLException sqle) {
+			throw new DatabaseException(sqle);
+		}
+		return user;
 	}
 
 	public Collection findAll() throws DatabaseException {
 		Collection result = new LinkedList();
 
 		try {
-			Connection conneciton = connectionFactory.createConneciton();
+			Connection conneciton = connectionFactory.createConnection();
 			Statement statement = conneciton.createStatement();
 			ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
 			while (resultSet.next()) {

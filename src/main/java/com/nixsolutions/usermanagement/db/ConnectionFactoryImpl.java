@@ -18,16 +18,12 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 		this.password = password;
 	}
 
-	
-
 	public ConnectionFactoryImpl() {
 		// TODO Auto-generated constructor stub
 	}
 
-
-
 	@Override
-	public Connection createConneciton() throws DatabaseException {
+	public Connection createConnection() throws DatabaseException {
 		String url = "jdbc:hsqldb:file:db/usermanagement";
 		String user = "sa";
 		String password = "";
