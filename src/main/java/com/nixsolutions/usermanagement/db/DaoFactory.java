@@ -14,7 +14,7 @@ public class DaoFactory {
 		return INSTANCE;
 	}
 
-	public DaoFactory() {
+	private DaoFactory() {
 		properties = new Properties();
 
 		try {
