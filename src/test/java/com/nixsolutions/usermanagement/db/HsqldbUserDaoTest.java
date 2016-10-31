@@ -43,9 +43,9 @@ public class HsqldbUserDaoTest extends DatabaseTestCase {
 		}
 
 	}
-	
+
 	public void testFindAll() {
-		try{
+		try {
 			Collection collection = dao.findAll();
 			assertNotNull(collection);
 			assertEquals(2, collection.size());
@@ -53,7 +53,7 @@ public class HsqldbUserDaoTest extends DatabaseTestCase {
 			e.printStackTrace();
 			fail(e.toString());
 		}
-		
+
 	}
 
 	@Override
