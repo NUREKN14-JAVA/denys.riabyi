@@ -6,12 +6,15 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import com.nixsolutions.usermanagement.User;
 
 public class HsqldbUserDao implements UserDao {
 
+	private static final String SELECT_ALL_QUERY = "SELECT id, firstname, lastname, dateofbirth FROM users";
 	private static final String INSERT_QUERY = "INSERT INTO users (firstname, lastname, dateofbirth) VALUES (?, ?, ?)";
 	private ConnectionFactory connectionFactory;
 
@@ -48,31 +51,45 @@ public class HsqldbUserDao implements UserDao {
 
 	}
 
-
 	public void update(User user) throws DatabaseException {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	public void delete(User user) throws DatabaseException {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	public User find(Long id) throws DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
-	public Collection<?> findAll() throws DatabaseException {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection findAll() throws DatabaseException {
+		Collection result = new LinkedList();
+
+		try {
+			Connection conneciton = connectionFactory.createConneciton();
+			Statement statement = conneciton.createStatement();
+			ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
+			while (resultSet.next()) {
+				User user = new User();
+				user.setId(new Long(resultSet.getLong(1)));
+				user.setFirstName(resultSet.getString(2));
+				user.setFirstName(resultSet.getString(3));
+				user.setDateOfBirth(resultSet.getDate(4));
+				result.add(user);
+			}
+		} catch (DatabaseException e) {
+			throw e;
+		} catch (SQLException e) {
+			throw new DatabaseException();
+		}
+
+		return result;
 	}
 
-	
 	public void setConnectionFactory(ConnectionFactory connectionFactory) {
 		// TODO Auto-generated method stub
 
