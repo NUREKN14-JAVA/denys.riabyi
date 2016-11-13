@@ -6,7 +6,7 @@ import java.util.Properties;
 public class DaoFactory {
 
 	private static final String USER_DAO = "dao.com.nixsolutions.usermanagement.db.UserDao";
-	private final Properties properties;
+	private Properties properties;
 
 	private final static DaoFactory INSTANCE = new DaoFactory();
 
@@ -24,13 +24,13 @@ public class DaoFactory {
 		}
 
 	}
+	
+	public void init(Properties properties){
+		this.properties = properties;
+	}
 
 	private ConnectionFactory getConnectionFactory() {
-		String user = properties.getProperty("connection.user");
-		String password = properties.getProperty("connection.password");
-		String url = properties.getProperty("connection.url");
-		String driver = properties.getProperty("connection.driver");
-		return new ConnectionFactoryImpl(driver, url, user, password);
+		return new ConnectionFactoryImpl(properties);
 	}
 
 	public UserDao getUserDao() {
