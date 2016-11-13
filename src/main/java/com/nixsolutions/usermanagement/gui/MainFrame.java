@@ -13,6 +13,7 @@ public class MainFrame extends JFrame {
 	private JPanel contentPanel;
 	private JPanel browsePanel;
 
+	private AddPanel addPanel;
 	private MainFrame parent;
 
 	private JPanel buttonPanel;
@@ -56,8 +57,26 @@ public class MainFrame extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
+	}
+
+	public void showAddPanel() {
+		showPanel(getAddPanel());
+
+	}
+
+	private void showPanel(JPanel panel) {
+		getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setVisible(true);
+		panel.repaint();
+
+	}
+
+	private AddPanel getAddPanel() {
+		if (addPanel == null) {
+			addPanel = new AddPanel(this);
+		}
+		return addPanel;
 	}
 
 }
