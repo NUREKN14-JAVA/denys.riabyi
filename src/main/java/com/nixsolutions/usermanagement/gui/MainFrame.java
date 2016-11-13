@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
+import com.nixsolutions.usermanagement.util.Messages;
+
 public class MainFrame extends JFrame {
 
 	private static final int FRAME_HEIGHT = 600;
@@ -44,7 +46,7 @@ public class MainFrame extends JFrame {
 	private JTable getUserTable() {
 		if (userTable == null) {
 			userTable = new JTable();
-			userTable.setName("userTable");
+			userTable.setName(Messages.getString("MainFrame.1")); //$NON-NLS-1$
 		}
 		return userTable;
 	}

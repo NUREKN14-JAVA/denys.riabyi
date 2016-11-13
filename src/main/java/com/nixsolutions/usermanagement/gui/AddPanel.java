@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.nixsolutions.usermanagement.util.Messages;
+
 public class AddPanel extends JPanel implements ActionListener {
 
 	protected MainFrame parent;
@@ -29,7 +31,7 @@ public class AddPanel extends JPanel implements ActionListener {
 	}
 
 	private void initialize() {
-		this.setName("addPanel");
+		this.setName(Messages.getString("AddPanel.0")); //$NON-NLS-1$
 		this.setLayout(new BorderLayout());
 		this.add(getFieldPanel(), BorderLayout.NORTH);
 		this.add(getButtonPanel(), BorderLayout.SOUTH);
@@ -48,9 +50,9 @@ public class AddPanel extends JPanel implements ActionListener {
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
-			cancelButton.setText("Отмена");
-			cancelButton.setName("cancelButton");
-			cancelButton.setActionCommand("cancel");
+			cancelButton.setText(Messages.getString("AddPanel.cancel")); //$NON-NLS-1$
+			cancelButton.setName(Messages.getString("AddPanel.2")); //$NON-NLS-1$
+			cancelButton.setActionCommand(Messages.getString("AddPanel.3")); //$NON-NLS-1$
 			cancelButton.addActionListener(this);
 		}
 		return cancelButton;
@@ -59,9 +61,9 @@ public class AddPanel extends JPanel implements ActionListener {
 	private JButton getOkButton() {
 		if (okButton == null) {
 			okButton = new JButton();
-			okButton.setText("Ок");
-			okButton.setName("okButton"); 
-			okButton.setActionCommand("ok");
+			okButton.setText(Messages.getString("AddPanel.4")); //$NON-NLS-1$
+			okButton.setName(Messages.getString("AddPanel.5")); //$NON-NLS-1$
+			okButton.setActionCommand(Messages.getString("AddPanel.6")); //$NON-NLS-1$
 			okButton.addActionListener(this);
 		}
 		return okButton;
@@ -71,9 +73,9 @@ public class AddPanel extends JPanel implements ActionListener {
 		if (fieldPanel == null) {
 			fieldPanel = new JPanel();
 			fieldPanel.setLayout(new GridLayout(3, 2));
-			addLabeledField(fieldPanel, "Имя", getFirstNameField());
-			addLabeledField(fieldPanel, "Фамилия", getLastNameField());
-			addLabeledField(fieldPanel, "Дата рождения", getDateOfBirthField());
+			addLabeledField(fieldPanel, Messages.getString("AddPanel.first_name"), getFirstNameField()); //$NON-NLS-1$
+			addLabeledField(fieldPanel, Messages.getString("AddPanel.last_name"), getLastNameField()); //$NON-NLS-1$
+			addLabeledField(fieldPanel, Messages.getString("AddPanel.date_of_birth"), getDateOfBirthField()); //$NON-NLS-1$
 		}
 		return fieldPanel;
 	}
@@ -81,7 +83,7 @@ public class AddPanel extends JPanel implements ActionListener {
 	protected JTextField getDateOfBirthField() {
 		if (dateOfBirthField == null) {
 			dateOfBirthField = new JTextField();
-			dateOfBirthField.setName("dateOfBirthField");
+			dateOfBirthField.setName(Messages.getString("AddPanel.10")); //$NON-NLS-1$
 		}
 		return dateOfBirthField;
 	}
@@ -89,7 +91,7 @@ public class AddPanel extends JPanel implements ActionListener {
 	protected JTextField getLastNameField() {
 		if (lastNameField == null) {
 			lastNameField = new JTextField();
-			lastNameField.setName("lastNameField");
+			lastNameField.setName(Messages.getString("AddPanel.11")); //$NON-NLS-1$
 		}
 		return lastNameField;
 	}
@@ -104,7 +106,7 @@ public class AddPanel extends JPanel implements ActionListener {
 	protected JTextField getFirstNameField() {
 		if (firstNameField == null) {
 			firstNameField = new JTextField();
-			firstNameField.setName("firstNameField");
+			firstNameField.setName(Messages.getString("AddPanel.12")); //$NON-NLS-1$
 		}
 		return firstNameField;
 	}
