@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
+import com.nixsolutions.usermanagement.db.DaoFactory;
+import com.nixsolutions.usermanagement.db.UserDao;
 import com.nixsolutions.usermanagement.util.Messages;
 
 public class MainFrame extends JFrame {
@@ -14,17 +16,20 @@ public class MainFrame extends JFrame {
 	private static final int FRAME_WIDTH = 800;
 	private JPanel contentPanel;
 	private JPanel browsePanel;
-
 	private AddPanel addPanel;
 	private MainFrame parent;
-
 	private JPanel buttonPanel;
-
 	private JTable userTable;
+	private UserDao dao;
 
 	public MainFrame() {
 		super();
+		dao = DaoFactory.getInstance().getUserDao();
 		initialize();
+	}
+
+	public UserDao getDao() {
+		return dao;
 	}
 
 	private void initialize() {
@@ -55,6 +60,7 @@ public class MainFrame extends JFrame {
 		if (browsePanel == null) {
 			browsePanel = new BrowsePanel(this);
 		}
+		((BrowsePanel) browsePanel).initTable();
 		return browsePanel;
 	}
 

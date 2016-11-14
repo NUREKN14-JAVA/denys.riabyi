@@ -3,6 +3,7 @@ package com.nixsolutions.usermanagement.gui;
 import java.awt.Component;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -11,6 +12,10 @@ import javax.swing.JTextField;
 
 import org.junit.After;
 import org.junit.Before;
+
+import com.nixsolutions.usermanagement.db.DaoFactory;
+import com.nixsolutions.usermanagement.db.DaoFactoryImpl;
+import com.nixsolutions.usermanagement.db.MockUserDao;
 
 import junit.extensions.jfcunit.JFCTestCase;
 import junit.extensions.jfcunit.JFCTestHelper;
@@ -25,6 +30,11 @@ public class MainFrameTest extends JFCTestCase {
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
+		Properties properties = new Properties();
+		properties.setProperty("dao.com.nixsolutions.usermanagement.db.UserDao", MockUserDao.class.getName());
+		properties.setProperty("dao.factory", DaoFactoryImpl.class.getName());
+		DaoFactory.getInstance().init(properties);
+
 		setHelper(new JFCTestHelper());
 		mainFrame = new MainFrame();
 		mainFrame.setVisible(true);
@@ -64,7 +74,7 @@ public class MainFrameTest extends JFCTestCase {
 	public void testAddUser() {
 		JTable table = (JTable) find(JTable.class, "userTable");
 		assertEquals(0, table.getRowCount());
-		
+
 		JButton addButton = (JButton) find(JButton.class, "addButton");
 		getHelper().enterClickAndLeave(new MouseEventData(this, addButton));
 
