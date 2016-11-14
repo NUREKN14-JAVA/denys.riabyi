@@ -2,6 +2,7 @@ package com.nixsolutions.usermanagement.gui;
 
 import java.awt.Component;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
@@ -13,9 +14,9 @@ import javax.swing.JTextField;
 import org.junit.After;
 import org.junit.Before;
 
+import com.mockobjects.dynamic.Mock;
 import com.nixsolutions.usermanagement.db.DaoFactory;
-import com.nixsolutions.usermanagement.db.DaoFactoryImpl;
-import com.nixsolutions.usermanagement.db.MockUserDao;
+import com.nixsolutions.usermanagement.db.MockDaoFactory;
 
 import junit.extensions.jfcunit.JFCTestCase;
 import junit.extensions.jfcunit.JFCTestHelper;
@@ -26,14 +27,17 @@ import junit.extensions.jfcunit.finder.NamedComponentFinder;
 public class MainFrameTest extends JFCTestCase {
 
 	private MainFrame mainFrame;
+	private Mock mockUserDao;
 
 	@Before
 	protected void setUp() throws Exception {
 		super.setUp();
 		Properties properties = new Properties();
-		properties.setProperty("dao.com.nixsolutions.usermanagement.db.UserDao", MockUserDao.class.getName());
-		properties.setProperty("dao.factory", DaoFactoryImpl.class.getName());
-		DaoFactory.getInstance().init(properties);
+		properties.setProperty("dao.factory", MockDaoFactory.class.getName());
+		DaoFactory.init(properties);
+
+		mockUserDao = ((MockDaoFactory) DaoFactory.getInstance()).getMockUserDao();
+		mockUserDao.expectAndReturn("findAll", new ArrayList());
 
 		setHelper(new JFCTestHelper());
 		mainFrame = new MainFrame();
@@ -43,9 +47,14 @@ public class MainFrameTest extends JFCTestCase {
 
 	@After
 	protected void tearDown() throws Exception {
-		mainFrame.setVisible(false);
-		getHelper().cleanUp(this);
-		super.tearDown();
+		try {
+			mockUserDao.verify();
+			mainFrame.setVisible(false);
+			getHelper().cleanUp(this);
+			super.tearDown();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Component find(Class componentClass, String name) {
